@@ -41,7 +41,7 @@ async fn cpu_temperature() -> units::ThermodynamicTemperature {
     // We stuff all the sensors into a hashmap, then pull out our
     // preferred sensors by label names.
     let composite_label = String::from("Composite");
-    let cpu_label = String::from("CPU");
+    let unknown_label = String::from("unknown");
     let temp_default = units::ThermodynamicTemperature::new::<
         units::thermodynamic_temperature::degree_celsius,
     >(0.0);
@@ -58,8 +58,7 @@ async fn cpu_temperature() -> units::ThermodynamicTemperature {
 
     *temperature_sensors
         .get(&composite_label)
-        .ok_or(temperature_sensors.get(&cpu_label))
-        .unwrap_or(&temp_default)
+        .unwrap_or(&temperature_sensors.get(&unknown_label).unwrap_or(&temp_default))
 }
 
 #[tokio::main]
